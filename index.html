@@ -1054,7 +1054,7 @@
 
       /* Hero */
       #hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-right { min-height: 60vw; order: -1; }
+      .hero-right { height: 60vw; min-height: 60vw; order: -1; }
       .hero-left { padding: 40px 24px 96px; max-width: 100%; }
       .hero-headline { font-size: 42px; }
       .hero-actions { flex-direction: column; align-items: flex-start; }
@@ -1794,18 +1794,24 @@
         opacity: 0, y: 24, duration: 0.8, ease: 'power2.out', stagger: 0.15, delay: 0.5
       });
 
-      // Hero video — two-phase scroll-driven scrub
-      // Phase 1: hero pinned, scrub 0 → 3 s
-      // Phase 2: hero unpins and scrolls naturally, scrub 3 s → end
+      // Hero video — scroll-scrubbed on desktop, autoplays on mobile
       (function () {
         var vid = document.getElementById('hero-video');
         if (!vid) return;
 
-        var PHASE1_SECS = 3;    // seconds of video to cover while pinned
-        var PX_PER_SEC  = 180;  // scroll pixels per video-second (controls pin duration)
+        var isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+        if (isMobile) {
+          // On mobile: just autoplay/loop — no pinning
+          vid.setAttribute('autoplay', '');
+          vid.setAttribute('loop', '');
+          vid.play().catch(function () {});
+          return;
+        }
+
+        var PX_PER_SEC = 180; // scroll pixels per video-second (controls pin duration)
 
         function seek(t) {
-          // fastSeek is available in Firefox — falls back to currentTime everywhere else
           if (typeof vid.fastSeek === 'function') { vid.fastSeek(t); } else { vid.currentTime = t; }
         }
 
@@ -1813,41 +1819,23 @@
           vid.pause();
           seek(0);
 
-          var dur  = vid.duration || 4;
-          var p1s  = Math.min(PHASE1_SECS, dur); // actual phase-1 video seconds
-          var p1px = p1s * PX_PER_SEC;           // scroll distance while pinned
+          var dur   = vid.duration || 4;
+          var pinPx = dur * PX_PER_SEC; // total scroll distance while pinned
 
-          // ── Phase 1: pin hero, scrub video 0 → p1s ─────────────────────
           ScrollTrigger.create({
-            trigger:           '#hero',
-            start:             'top top',
-            end:               '+=' + p1px,
-            pin:               true,
-            pinSpacing:        true,
+            trigger:             '#hero',
+            start:               'top top',
+            end:                 '+=' + pinPx,
+            pin:                 true,
+            pinSpacing:          true,
             invalidateOnRefresh: true,
-            scrub:             true,
+            scrub:               true,
             onUpdate: function (st) {
-              if (vid.readyState >= 2) seek(p1s * st.progress);
+              if (vid.readyState >= 2) seek(dur * st.progress);
             }
           });
-
-          // ── Phase 2: hero scrolls off naturally, scrub video p1s → end ──
-          if (dur > p1s) {
-            ScrollTrigger.create({
-              trigger:           '#hero',
-              start:             'top top-=' + p1px,
-              end:               'bottom top',
-              invalidateOnRefresh: true,
-              scrub:             true,
-              onUpdate: function (st) {
-                if (vid.readyState >= 2) seek(p1s + (dur - p1s) * st.progress);
-              }
-            });
-          }
         }
 
-        // Bind as soon as video metadata is available; fall back gracefully
-        // if the video never loads (first frame stays visible, no JS errors).
         if (vid.readyState >= 1) {
           bindScrub();
         } else {
