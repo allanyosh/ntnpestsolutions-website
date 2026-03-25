@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Claude project files
+.claude/
+
+# Brand guide (internal, not needed for deployment)
+brand guide/
+md/
+
+# Photoshop source files (too large for GitHub)
+*.psd
+
+# Raw uncompressed source photos (large, not referenced in site)
+brand_assets/Images/NTN-*.jpg
+brand_assets/Images/DSC*.jpg
+brand_assets/Images/1_NTN_ants.jpg
+brand_assets/Images/ntn pot with bottle.jpg
+brand_assets/Images/ntn-pot.jpg
+brand_assets/Images/not used/
+
+# Unused video versions
+brand_assets/videos/bottle_squeezing_hero page.mp4
+brand_assets/videos/bottle_squeezing_hero page_v2.mp4

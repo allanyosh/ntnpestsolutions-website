@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NTN Liquid Ant Killer — Kills the Colony.</title>
+  <meta name="description" content="NTN Liquid Ant Killer is a borax-based ant bait that ants carry back to the nest, targeting the entire colony. Made in Singapore." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <style>
+    /* =========================================
+       TOKENS
+    ========================================= */
+    :root {
+      --black:  #000000;
+      --white:  #FFFFFF;
+      --yellow: #FDEA00;
+      --off:    #F8F8F6;
+      --muted:  #6B6B6B;
+      --border: rgba(0,0,0,0.1);
+      --max-w:  1080px;
+    }
+
+    /* =========================================
+       RESET
+    ========================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; text-decoration: none; }
+
+    /* =========================================
+       SHARED
+    ========================================= */
+    .eyebrow {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .eyebrow--light { color: rgba(255,255,255,0.45); }
+
+    .display--medium {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+    .display--medium--white { color: var(--white); }
+
+    .body-copy {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .btn-yellow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border: 2px solid var(--yellow);
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .btn-yellow:hover { background: #e8d500; border-color: #e8d500; }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--black);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 15px 32px;
+      border: 1.5px solid var(--black);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { background: var(--black); color: var(--white); }
+
+    /* =========================================
+       NAV
+    ========================================= */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 48px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    #nav.scrolled {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    /* Logo */
+    .nav-logo-img {
+      height: 84px;
+      width: auto;
+      display: block;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .nav-link {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.15s;
+      position: relative;
+      padding-bottom: 3px;
+      white-space: nowrap;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1.5px;
+      background: var(--black);
+      transform: scaleX(0);
+      transition: transform 0.2s ease;
+    }
+    .nav-link:hover { color: var(--black); }
+    .nav-link:hover::after { transform: scaleX(1); }
+    .nav-link.active { color: var(--black); font-weight: 700; }
+    .nav-link.active::after { transform: scaleX(1); }
+
+    .nav-cta {
+      background: var(--black);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.22s, color 0.22s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .nav-cta:hover { background: var(--yellow); color: var(--black); }
+
+    /* =========================================
+       TICKER BANNER
+    ========================================= */
+    #ticker-banner {
+      position: fixed;
+      top: 60px;
+      left: 0; right: 0;
+      z-index: 499;
+      height: 32px;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+    }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex;
+      align-items: stretch;
+      width: max-content;
+      animation: ticker-scroll 28s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-set {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 36px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      gap: 16px;
+    }
+    .ticker-set--black  { background: var(--black);  color: var(--white); }
+    .ticker-set--yellow { background: var(--yellow); color: var(--black); }
+    .ticker-sep {
+      opacity: 0.35;
+    }
+
+    /* =========================================
+       HERO
+    ========================================= */
+    #hero {
+      padding-top: 92px;
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      background: var(--white);
+      overflow: hidden;
+    }
+    /* Prevent GSAP pin spacer from showing as transparent over the black reviews section */
+    .gsap-pin-spacer { background: var(--white); }
+
+    /* Left side — centred with generous inner padding */
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 56px 80px 256px;
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+    }
+    .hero-headline-wrap {
+      position: relative;
+    }
+
+    .hero-headline {
+      font-size: clamp(44px, 5vw, 80px);
+      font-weight: 900;
+      line-height: 0.97;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .hero-headline .accent {
+      display: block;
+      color: var(--muted);
+      font-weight: 300;
+      font-style: italic;
+      font-size: 0.55em;
+      letter-spacing: -0.01em;
+      text-transform: none;
+      margin-top: 10px;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 52px;
+      white-space: nowrap;
+    }
+
+    .hero-stat-row {
+      display: flex;
+      gap: 40px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat-num {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    /* Right side — scroll-scrubbed video + sticker */
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+      background: var(--white);
+    }
+    .hero-bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: right center;
+      display: block;
+    }
+    /* Inward vignette — fades all four edges to white so video
+       bleeds seamlessly into the page background */
+    .hero-video-vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background:
+        linear-gradient(to right,  #fff 0%, rgba(255,255,255,0) 32%),
+        linear-gradient(to bottom, #fff 0%, rgba(255,255,255,0) 21%),
+        linear-gradient(to top,    #fff 0%, rgba(255,255,255,0) 25%),
+        linear-gradient(to left,   #fff 0%, rgba(255,255,255,0) 18%);
+    }
+    .hero-sticker {
+      position: absolute;
+      top: -24px;
+      right: -80px;
+      width: 160px;
+      height: auto;
+      z-index: 10;
+    }
+    .hero-caption {
+      position: absolute;
+      bottom: 28px;
+      left: 28px;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.35);
+      z-index: 2;
+    }
+
+    /* =========================================
+       REVIEWS MARQUEE
+    ========================================= */
+    #reviews-carousel {
+      background: var(--black);
+      padding: 80px 0;
+      overflow: hidden;
+    }
+    .marquee-header {
+      padding: 0 48px;
+      margin: 0 auto 56px;
+      text-align: center;
+    }
+    .marquee-title {
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--white);
+      line-height: 1;
+    }
+    .marquee-outer {
+      overflow: hidden;
+      width: 100%;
+      cursor: pointer;
+    }
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 80s linear infinite;
+      will-change: transform;
+    }
+    .marquee-track.paused {
+      animation-play-state: paused;
+    }
+    .marquee-item {
+      width: 340px;
+      flex-shrink: 0;
+      margin-right: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .c-stars {
+      font-size: 14px;
+      letter-spacing: 3px;
+      color: var(--yellow);
+    }
+    .c-text {
+      font-size: 15px;
+      font-style: italic;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.85);
+      flex: 1;
+    }
+    .c-meta {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .c-platform {
+      background: rgba(255,255,255,0.07);
+      padding: 2px 8px;
+      font-size: 9px;
+    }
+
+    /* =========================================
+       HOW TO USE
+    ========================================= */
+    #how-to-use {
+      padding: 120px 0 0;
+      background: var(--white);
+    }
+    .how-header {
+      max-width: var(--max-w);
+      margin: 0 auto 72px;
+      padding: 0 56px;
+      text-align: center;
+    }
+    .how-header .eyebrow {
+      font-size: 13px;
+      letter-spacing: 0.22em;
+    }
+
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1.5px solid var(--black);
+    }
+    .step-panel {
+      padding: 52px 48px 56px;
+      border-right: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .step-panel:last-child { border-right: none; }
+
+    /* Foreground step index */
+    .step-index {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .step-num-badge {
+      font-size: clamp(80px, 7vw, 120px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--black);
+    }
+    .step-icon {
+      color: var(--black);
+      position: relative;
+    }
+    .step-icon img {
+      display: block;
+      width: 72px;
+      height: 72px;
+    }
+
+    .step-headline {
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .step-body {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .step-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      position: relative;
+    }
+
+    /* =========================================
+       HOW IT WORKS
+    ========================================= */
+    #why-it-works {
+      margin-top: 120px;
+      background: var(--black);
+      color: var(--white);
+    }
+    .why-section-header {
+      padding: 100px 56px;
+      text-align: center;
+    }
+    .why-groups {
+      display: flex;
+      flex-direction: column;
+    }
+    /* Default group: black bg */
+    .why-group {
+      display: grid;
+      grid-template-columns: 42vw 1fr;
+      gap: 0;
+      align-items: start;
+      background: var(--black);
+    }
+    /* Odd groups: yellow bg */
+    .why-group:nth-child(odd) {
+      background: var(--yellow);
+      color: var(--black);
+    }
+    .why-group-img {
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      width: 100%;
+    }
+    .why-group-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .why-group-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 72px;
+    }
+    /* Image GPU hint */
+    .why-group-img img {
+      will-change: transform;
+      transform-origin: center;
+    }
+    /* Title: yellow on black, black on yellow */
+    .why-group-title {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 36px;
+    }
+    .why-group:nth-child(odd) .why-group-title {
+      color: var(--black);
+    }
+    .why-item {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 20px;
+      align-items: start;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .why-group:nth-child(odd) .why-item {
+      border-bottom-color: rgba(0,0,0,0.1);
+    }
+    .why-item:first-child { padding-top: 0; }
+    .why-item:last-child { border-bottom: none; }
+    .why-item-num {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: rgba(255,255,255,0.4);
+      line-height: 1;
+    }
+    .why-group:nth-child(odd) .why-item-num {
+      color: rgba(0,0,0,0.3);
+    }
+    .why-item-title {
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+    .why-group:nth-child(odd) .why-item-title {
+      color: var(--black);
+    }
+    .why-item-body {
+      font-size: 16px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.8;
+    }
+    .why-group:nth-child(odd) .why-item-body {
+      color: rgba(0,0,0,0.65);
+    }
+
+    /* =========================================
+       WHY NTN
+    ========================================= */
+    #why-ntn {
+      padding: 120px 56px;
+      background: var(--white);
+    }
+    .vs-inner { max-width: var(--max-w); margin: 0 auto; }
+    .vs-header {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 64px;
+    }
+    .vs-header h2 {
+      font-size: clamp(32px, 4.5vw, 62px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      text-transform: uppercase;
+      margin-top: 14px;
+      margin-bottom: 20px;
+    }
+    .vs-rows { display: flex; flex-direction: column; }
+    .vs-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1.6fr 1.6fr 1.6fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .vs-row:first-child { border-top: 1.5px solid var(--black); }
+    .vs-cell {
+      padding: 16px 20px;
+      font-size: 14px;
+      border-right: 1px solid var(--border);
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .vs-cell:last-child { border-right: none; }
+    .vs-row.header-row .vs-cell {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-bottom: 1.5px solid var(--black);
+      padding: 14px 20px;
+      white-space: nowrap;
+    }
+    .vs-row.header-row .vs-cell.ntn { background: var(--yellow); }
+    .vs-cell.ntn { font-weight: 600; background: #FFFDE0; }
+
+    /* =========================================
+       TESTIMONIALS
+    ========================================= */
+    #testimonials {
+      background: var(--off);
+      overflow: hidden;
+    }
+    .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .testimonial-feature {
+      padding: 100px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .testimonial-mark {
+      font-size: 88px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--black);
+      opacity: 0.06;
+      letter-spacing: -0.05em;
+      margin-bottom: 20px;
+    }
+    .testimonial-quote-large {
+      font-size: clamp(19px, 2.4vw, 27px);
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--black);
+      font-style: italic;
+      margin-bottom: 32px;
+    }
+    .testimonial-credit {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .testimonial-image-col {
+      overflow: hidden;
+      min-height: 560px;
+    }
+    .testimonial-image-col img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* =========================================
+       BRAND STORY
+    ========================================= */
+    #story {
+      padding: 120px 56px;
+      background: var(--yellow);
+      position: relative;
+      overflow: hidden;
+    }
+    .story-ant-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: url('brand_assets/Images/ant crawling graphic.png') center center / cover no-repeat;
+      opacity: 1;
+      mix-blend-mode: multiply;
+    }
+    .story-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 72px;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+    .story-image { position: relative; }
+    .story-image img { width: 100%; display: block; }
+    .story-eyebrow {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+      opacity: 0.5;
+    }
+    .story-headline {
+      font-size: clamp(36px, 4vw, 64px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-top: 14px;
+      margin-bottom: 28px;
+    }
+    .story-body {
+      font-size: 18px;
+      line-height: 1.85;
+      color: rgba(0,0,0,0.72);
+    }
+    .story-body p + p { margin-top: 18px; }
+
+    /* =========================================
+       FAQ
+    ========================================= */
+    #faq {
+      padding: 120px 56px;
+      background: var(--off);
+    }
+    .faq-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 96px;
+      align-items: start;
+    }
+    .faq-left { position: static; }
+    .faq-section-label {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      line-height: 1;
+      color: var(--black);
+      margin-bottom: 16px;
+      margin-top: 12px;
+    }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:first-child { border-top: 1px solid var(--border); }
+    .faq-btn {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 22px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.45;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .faq-btn:hover { color: var(--muted); }
+    .faq-icon {
+      font-size: 22px;
+      font-weight: 300;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+      line-height: 1;
+      color: var(--muted);
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--black); }
+    .faq-answer {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding-bottom 0.2s;
+    }
+    .faq-item.open .faq-answer { max-height: 400px; padding-bottom: 22px; }
+
+    /* =========================================
+       CONTACT US
+    ========================================= */
+    #contact {
+      padding: 120px 56px;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+    }
+    .contact-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 96px;
+      align-items: center;
+    }
+    .contact-headline {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-top: 14px;
+      margin-bottom: 20px;
+    }
+    .contact-sub {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .contact-item {
+      padding: 28px 32px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .contact-item-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .contact-item-value {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--black);
+      transition: color 0.15s;
+    }
+    .contact-item-value:hover { color: var(--muted); }
+    .contact-item-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* =========================================
+       WHERE TO BUY
+    ========================================= */
+    #buy {
+      padding: 120px 56px;
+      background: var(--black);
+      color: var(--white);
+      text-align: center;
+    }
+    .buy-inner { max-width: 760px; margin: 0 auto; }
+    .buy-headline {
+      font-size: clamp(32px, 5vw, 60px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .buy-subhead {
+      font-size: 18px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0;
+      text-transform: none;
+      margin-bottom: 52px;
+    }
+    .buy-partner-img {
+      width: 100%;
+      display: block;
+      margin: 32px auto;
+      opacity: 0.5;
+    }
+    .platform-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 64px;
+    }
+    .platform-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 22px 28px;
+      border: 2px solid var(--yellow);
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .platform-btn:hover { background: #e8d500; border-color: #e8d500; }
+    .platform-btn-arrow {
+      font-size: 18px;
+      transition: transform 0.15s;
+    }
+    .platform-btn:hover .platform-btn-arrow { transform: translateX(4px); }
+
+    .stores-divider { display: none; }
+    .stores-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 24px;
+    }
+    .stores-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      text-align: left;
+    }
+    .store-card { padding: 16px 20px; border: 1px solid rgba(255,255,255,0.1); }
+    .store-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .store-address { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.55; }
+
+    /* =========================================
+       FOOTER
+    ========================================= */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 48px 56px;
+    }
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+    .footer-copy { font-size: 11px; color: rgba(255,255,255,0.8); }
+
+    /* =========================================
+       STICKY MOBILE CTA
+    ========================================= */
+    #sticky-cta {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 400;
+      background: rgba(0,0,0,0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 14px 24px;
+    }
+    .sticky-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .sticky-label { font-size: 13px; font-weight: 700; color: var(--white); }
+    .sticky-sub { display: block; font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    .sticky-btn {
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 13px 24px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    /* =========================================
+       RESPONSIVE
+    ========================================= */
+    @media (max-width: 1100px) {
+      #nav { padding: 0 32px; }
+      .how-header { padding: 0 40px; }
+      #why-ntn, #story, #faq, #contact, #buy { padding-left: 40px; padding-right: 40px; }
+      footer { padding: 28px 40px; }
+    }
+
+    @media (max-width: 900px) {
+      /* Hide some nav links at mid-width */
+      .nav-links .nav-link:nth-child(n+4):not(:last-child) { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      #sticky-cta { display: block; }
+      #nav { padding: 0 20px; }
+      .nav-links { display: none; }
+
+      /* Hero */
+      #hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { min-height: 60vw; order: -1; }
+      .hero-left { padding: 40px 24px 96px; max-width: 100%; }
+      .hero-headline { font-size: 42px; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .hero-actions .btn-yellow,
+      .hero-actions .btn-ghost { width: 100%; }
+      .hero-stat-row { gap: 24px; flex-wrap: wrap; }
+      .hero-sticker { right: 0; top: -16px; width: 120px; }
+
+      /* Marquee */
+      #reviews-carousel { padding: 56px 0; }
+      .marquee-header { padding: 0 24px; }
+      .marquee-item { width: 280px; }
+
+      /* How to Use */
+      #how-to-use { padding-top: 80px; }
+      .how-header { padding: 0 24px; flex-direction: column; gap: 16px; align-items: flex-start; margin-bottom: 48px; }
+      .steps-row { grid-template-columns: 1fr; }
+      .step-panel { border-right: none; border-bottom: 1px solid var(--border); padding: 40px 24px; }
+      .step-panel:last-child { border-bottom: none; }
+      .step-image { aspect-ratio: 16/9; }
+
+
+      /* How it works */
+      #why-it-works { margin-top: 80px; }
+      .why-section-header { padding: 64px 24px; }
+      .why-group { grid-template-columns: 1fr; }
+      .why-group-img { aspect-ratio: 16 / 9; }
+      .why-group-content { padding: 40px 24px; }
+      .why-item { grid-template-columns: 44px 1fr; }
+
+      /* Why NTN */
+      #why-ntn { padding: 80px 24px; }
+      .vs-header { max-width: 100%; }
+      .vs-rows { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .vs-row { grid-template-columns: 120px 160px 140px 150px; width: 570px; min-width: unset; }
+      .vs-cell { padding: 12px 10px; font-size: 12px; white-space: normal; }
+
+      /* Testimonials */
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .testimonial-feature { padding: 64px 24px; }
+      .testimonial-image-col { min-height: 280px; }
+
+      /* Story */
+      #story { padding: 80px 24px; }
+      .story-inner { grid-template-columns: 1fr; gap: 40px; }
+
+      /* FAQ */
+      #faq { padding: 80px 24px; }
+      .faq-inner { grid-template-columns: 1fr; gap: 40px; }
+      .faq-left { position: static; }
+
+      /* Contact */
+      #contact { padding: 80px 24px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+
+      /* Buy */
+      #buy { padding: 80px 24px; }
+      .platform-grid { grid-template-columns: 1fr; gap: 10px; }
+      .stores-grid { grid-template-columns: 1fr; }
+
+      /* Footer */
+      footer { padding: 24px; }
+      .footer-inner { gap: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================================
+       NAV
+  ========================================= -->
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#hero" aria-label="NTN Home">
+        <img class="nav-logo-img" src="brand_assets/Logos/NTN LOGO_black.png" alt="NTN" />
+      </a>
+      <div class="nav-links">
+        <a href="#reviews-carousel"  class="nav-link" data-section="reviews-carousel">Reviews</a>
+        <a href="#how-to-use"       class="nav-link" data-section="how-to-use">How to Use</a>
+        <a href="#why-it-works"     class="nav-link" data-section="why-it-works">How It Works</a>
+        <a href="#why-ntn"          class="nav-link" data-section="why-ntn">Why NTN</a>
+        <a href="#story"            class="nav-link" data-section="story">Brand Story</a>
+        <a href="#faq"              class="nav-link" data-section="faq">FAQ</a>
+        <a href="#contact"          class="nav-link" data-section="contact">Contact Us</a>
+      </div>
+      <a href="#buy" class="nav-cta">Buy Now</a>
+    </div>
+  </nav>
+
+  <!-- Ticker banner -->
+  <div id="ticker-banner" aria-hidden="true">
+    <div class="ticker-track">
+      <div class="ticker-set ticker-set--black">1) Apply near ant trails <span class="ticker-sep">•</span> 2) Allow ants to feed <span class="ticker-sep">•</span> 3) Bait is carried back to the colony</div>
+      <div class="ticker-set ticker-set--yellow">1) Apply near ant trails <span class="ticker-sep">•</span> 2) Allow ants to feed <span class="ticker-sep">•</span> 3) Bait is carried back to the colony</div>
+      <div class="ticker-set ticker-set--black">1) Apply near ant trails <span class="ticker-sep">•</span> 2) Allow ants to feed <span class="ticker-sep">•</span> 3) Bait is carried back to the colony</div>
+      <div class="ticker-set ticker-set--yellow">1) Apply near ant trails <span class="ticker-sep">•</span> 2) Allow ants to feed <span class="ticker-sep">•</span> 3) Bait is carried back to the colony</div>
+      <div class="ticker-set ticker-set--black">1) Apply near ant trails <span class="ticker-sep">•</span> 2) Allow ants to feed <span class="ticker-sep">•</span> 3) Bait is carried back to the colony</div>
+      <div class="ticker-set ticker-set--yellow">1) Apply near ant trails <span class="ticker-sep">•</span> 2) Allow ants to feed <span class="ticker-sep">•</span> 3) Bait is carried back to the colony</div>
+      <div class="ticker-set ticker-set--black">1) Apply near ant trails <span class="ticker-sep">•</span> 2) Allow ants to feed <span class="ticker-sep">•</span> 3) Bait is carried back to the colony</div>
+      <div class="ticker-set ticker-set--yellow">1) Apply near ant trails <span class="ticker-sep">•</span> 2) Allow ants to feed <span class="ticker-sep">•</span> 3) Bait is carried back to the colony</div>
+    </div>
+  </div>
+
+
+  <!-- =========================================
+       HERO
+  ========================================= -->
+  <section id="hero">
+    <div class="hero-left">
+      <div class="hero-headline-wrap">
+        <h1 class="hero-headline" id="hero-headline">
+          Kills<br>the colony.
+          <span class="accent">Not just the ants you see.</span>
+        </h1>
+        <img
+          class="hero-sticker"
+          src="brand_assets/Images/kills queen and entire colony yellow sticker.png"
+          alt="Kills queen and entire colony"
+        />
+      </div>
+
+      <p class="hero-desc">
+        A borax-based liquid bait that ants carry back to the nest, targeting the entire colony at its source. Noticeable results in 1–3 days.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#buy" class="btn-yellow">Buy Now</a>
+        <a href="#how-to-use" class="btn-ghost">How It Works</a>
+      </div>
+
+      <div class="hero-stat-row">
+        <div>
+          <div class="hero-stat-num">1–3</div>
+          <div class="hero-stat-label">Days to<br>Results</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">7.5%</div>
+          <div class="hero-stat-label">Borax<br>Formula</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">30ml</div>
+          <div class="hero-stat-label">Multiple<br>Uses Per Bottle</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <video
+        id="hero-video"
+        class="hero-bg-video"
+        src="brand_assets/videos/bottle_squeezing_hero page_v3.mp4"
+        muted
+        playsinline
+        preload="auto"
+        disablepictureinpicture
+      ></video>
+      <div class="hero-video-vignette" aria-hidden="true"></div>
+    </div>
+  </section>
+
+
+  <!-- =========================================
+       REVIEWS CAROUSEL (right after hero)
+  ========================================= -->
+  <section id="reviews-carousel" aria-label="Customer reviews">
+    <div class="marquee-header">
+      <span class="marquee-title">What customers say</span>
+    </div>
+
+    <div class="marquee-outer">
+      <div class="marquee-track" id="marquee-track">
+
+        <!-- Original set -->
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Shockingly works really well. By day 2 I see massive results and now I barely have any ants in my kitchen."</p><div class="c-meta">zhixin_regin <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Product is effective to clear ants, just leave a drop for a few days. Use it as prevention now."</p><div class="c-meta">julieseahkoh <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Ordered this to eliminate ants from my kitchen. Worked quite well and I don't see them anymore. Effective."</p><div class="c-meta">xiaotong93 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"3rd or 4th bottle so far — 1 bottle lasts very long. Ant season hits, put a few drops, and a few hours later all ants disappeared."</p><div class="c-meta">mandy2601 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Super effective. Took a few days to work but wiped them out completely."</p><div class="c-meta">vungochuonglinh <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Repurchase as I gave my first bottle to my mum's friend. Found dead ants around and reduces ants around the house. Super useful!"</p><div class="c-meta">jyjy_ <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"So potent the ant ate and hadn't gone home — already died on the wall. Got two groups of ants, one group ate, results were immediate."</p><div class="c-meta">burl38 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"It does work. Ants are attracted to the liquid. Haven't seen ants foraging in the last 2 days. Order was shipped quickly and well packed."</p><div class="c-meta">angelynp65 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Quite liquidy but works well. Ants were gathering around the solution and in 2 days they were gone."</p><div class="c-meta">ln9712 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Good product. Have used it multiple times. Fast delivery by seller. 👍"</p><div class="c-meta">jascwl90 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Tested out — attracts ants to the liquid and instantly killed them. Will buy again."</p><div class="c-meta">suchin412 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Attracted ants really quickly. Within 6 hours already reduced. 12 hours later they were gone completely. Bit of sugar made them come out even faster."</p><div class="c-meta">musadabdullah786 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"I tried with different kinds of ants and it works. Sometimes 2 days, sometimes 1–2 weeks, but the ants eventually disappear."</p><div class="c-meta">phusangmook <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Very effective, fast delivery, well packaged. We are really happy with the purchase. Will order more in future."</p><div class="c-meta">zdasm0505 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"This is a very good buy and my repeat order too. Worth it and value for money."</p><div class="c-meta">nashitayee <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Repeat buyer. A little more expensive compared to other brands but I prefer it as it works better."</p><div class="c-meta">joycchan <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Received and immediately tested on the ants. Works as described. Fast delivery from seller."</p><div class="c-meta">maman252 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Delivery was prompt. After 1 day, cannot see ants around the affected areas."</p><div class="c-meta">wjalmighty <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Really works! Killed the entire colony within 2 days. Highly recommend for outdoor use — you will see a lot of ants come to it."</p><div class="c-meta">drewnicornz <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Works very well. Set it only once and most ants are gone the next day! Compared another brand — this one has impressive results."</p><div class="c-meta">baybear327 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item"><div class="c-stars">★★★★★</div><p class="c-text">"Sister-in-law recommended this. If it works for my home, I'll definitely be back for another bottle."</p><div class="c-meta">sophielily <span class="c-platform">Shopee</span></div></div>
+        <!-- Duplicate set for seamless loop -->
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Shockingly works really well. By day 2 I see massive results and now I barely have any ants in my kitchen."</p><div class="c-meta">zhixin_regin <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Product is effective to clear ants, just leave a drop for a few days. Use it as prevention now."</p><div class="c-meta">julieseahkoh <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Ordered this to eliminate ants from my kitchen. Worked quite well and I don't see them anymore. Effective."</p><div class="c-meta">xiaotong93 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"3rd or 4th bottle so far — 1 bottle lasts very long. Ant season hits, put a few drops, and a few hours later all ants disappeared."</p><div class="c-meta">mandy2601 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Super effective. Took a few days to work but wiped them out completely."</p><div class="c-meta">vungochuonglinh <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Repurchase as I gave my first bottle to my mum's friend. Found dead ants around and reduces ants around the house. Super useful!"</p><div class="c-meta">jyjy_ <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"So potent the ant ate and hadn't gone home — already died on the wall. Got two groups of ants, one group ate, results were immediate."</p><div class="c-meta">burl38 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"It does work. Ants are attracted to the liquid. Haven't seen ants foraging in the last 2 days. Order was shipped quickly and well packed."</p><div class="c-meta">angelynp65 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Quite liquidy but works well. Ants were gathering around the solution and in 2 days they were gone."</p><div class="c-meta">ln9712 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Good product. Have used it multiple times. Fast delivery by seller. 👍"</p><div class="c-meta">jascwl90 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Tested out — attracts ants to the liquid and instantly killed them. Will buy again."</p><div class="c-meta">suchin412 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Attracted ants really quickly. Within 6 hours already reduced. 12 hours later they were gone completely. Bit of sugar made them come out even faster."</p><div class="c-meta">musadabdullah786 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"I tried with different kinds of ants and it works. Sometimes 2 days, sometimes 1–2 weeks, but the ants eventually disappear."</p><div class="c-meta">phusangmook <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Very effective, fast delivery, well packaged. We are really happy with the purchase. Will order more in future."</p><div class="c-meta">zdasm0505 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"This is a very good buy and my repeat order too. Worth it and value for money."</p><div class="c-meta">nashitayee <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Repeat buyer. A little more expensive compared to other brands but I prefer it as it works better."</p><div class="c-meta">joycchan <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Received and immediately tested on the ants. Works as described. Fast delivery from seller."</p><div class="c-meta">maman252 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Delivery was prompt. After 1 day, cannot see ants around the affected areas."</p><div class="c-meta">wjalmighty <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Really works! Killed the entire colony within 2 days. Highly recommend for outdoor use — you will see a lot of ants come to it."</p><div class="c-meta">drewnicornz <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Works very well. Set it only once and most ants are gone the next day! Compared another brand — this one has impressive results."</p><div class="c-meta">baybear327 <span class="c-platform">Shopee</span></div></div>
+        <div class="marquee-item" aria-hidden="true"><div class="c-stars">★★★★★</div><p class="c-text">"Sister-in-law recommended this. If it works for my home, I'll definitely be back for another bottle."</p><div class="c-meta">sophielily <span class="c-platform">Shopee</span></div></div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================
+       HOW TO USE
+  ========================================= -->
+  <section id="how-to-use">
+    <div class="how-header">
+      <div>
+        <span class="eyebrow">How to Use</span>
+        <h2 class="display--medium" style="margin-top:14px;">Three steps. That's it.</h2>
+      </div>
+    </div>
+
+    <div class="steps-row">
+      <div class="step-panel">
+        <div class="step-index">
+          <div class="step-num-badge">01</div>
+          <div class="step-icon" aria-hidden="true">
+            <img src="brand_assets/Images/emoji/droplet_1f4a7.png" alt="" />
+          </div>
+        </div>
+        <h3 class="step-headline">Apply near ant trails</h3>
+        <p class="step-body">Locate where ants are moving. Place a few drops directly on the trail, or on a piece of foil or plastic for easy cleanup.</p>
+        <img class="step-image" src="brand_assets/Images/compressed/Compressed-1.jpg" alt="Ant trail on surface" loading="lazy" />
+      </div>
+
+      <div class="step-panel">
+        <div class="step-index">
+          <div class="step-num-badge">02</div>
+          <div class="step-icon" aria-hidden="true">
+            <img src="brand_assets/Images/emoji/fork-and-knife-with-plate_1f37d-fe0f.png" alt="" />
+          </div>
+        </div>
+        <h3 class="step-headline">Allow ants to feed</h3>
+        <p class="step-body">Ants will drink the bait and carry it back to the nest. Avoid disturbing them — each feeding helps spread the bait deeper.</p>
+        <img class="step-image" src="brand_assets/Images/ants drinking ntn-clean bg.png" alt="Ants feeding on NTN bait" loading="lazy" />
+      </div>
+
+      <div class="step-panel">
+        <div class="step-index">
+          <div class="step-num-badge">03</div>
+          <div class="step-icon" aria-hidden="true">
+            <img src="brand_assets/Images/emoji/skull-and-crossbones_2620-fe0f.png" alt="" />
+          </div>
+        </div>
+        <h3 class="step-headline">Bait reaches the colony</h3>
+        <p class="step-body">The bait spreads through the nest. Results are typically seen in 1–3 days. Reapply as needed until activity stops.</p>
+        <img class="step-image" src="brand_assets/Images/compressed/Compressed--6.jpg" alt="NTN Liquid Ant Killer bottles" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================
+       WHY IT WORKS
+  ========================================= -->
+  <section id="why-it-works">
+    <div class="why-inner">
+
+      <div class="why-section-header">
+        <h2 class="display--medium display--medium--white">How it works.</h2>
+      </div>
+
+      <div class="why-groups">
+
+        <!-- Group 1 -->
+        <div class="why-group">
+          <div class="why-group-img">
+            <img src="brand_assets/Images/compressed/Compressed-.jpg" alt="How NTN Works" loading="lazy" />
+          </div>
+          <div class="why-group-content">
+            <p class="why-group-title">How NTN Works</p>
+            <div class="why-item">
+              <span class="why-item-num">01</span>
+              <div>
+                <p class="why-item-title">Targets the source, not just the surface</p>
+                <p class="why-item-body">Most ant killers only eliminate the ants you see. NTN is designed to reach the hidden nest where the problem begins.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <span class="why-item-num">02</span>
+              <div>
+                <p class="why-item-title">Built to spread before taking effect</p>
+                <p class="why-item-body">The bait works gradually, allowing ants to carry it back and share it within the colony instead of dying immediately.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <span class="why-item-num">03</span>
+              <div>
+                <p class="why-item-title">Colony-wide impact over time</p>
+                <p class="why-item-body">As the bait spreads, more ants are affected beyond the visible trail. Activity typically reduces within 1–3 days.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 2 -->
+        <div class="why-group">
+          <div class="why-group-img">
+            <img src="brand_assets/Images/compressed/Compressed--7.jpg" alt="The Science Behind NTN" loading="lazy" />
+          </div>
+          <div class="why-group-content">
+            <p class="why-group-title">The Science Behind NTN</p>
+            <div class="why-item">
+              <span class="why-item-num">01</span>
+              <div>
+                <p class="why-item-title">A slow-acting bait system</p>
+                <p class="why-item-body">NTN uses a low concentration of active ingredient. When ingested, it disrupts the ant's internal systems over time rather than killing instantly.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <span class="why-item-num">02</span>
+              <div>
+                <p class="why-item-title">Shared through trophallaxis</p>
+                <p class="why-item-body">Ants naturally share food with one another through a process called trophallaxis. This allows the bait to spread deeper into the colony.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <span class="why-item-num">03</span>
+              <div>
+                <p class="why-item-title">Designed to work with ant behaviour</p>
+                <p class="why-item-body">By aligning with how ants feed and interact, the bait reaches areas that surface sprays cannot.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 3 -->
+        <div class="why-group">
+          <div class="why-group-img">
+            <img src="brand_assets/Images/compressed/Compressed-16.jpg" alt="Why Borax Works" loading="lazy" />
+          </div>
+          <div class="why-group-content">
+            <p class="why-group-title">Why Borax Works</p>
+            <div class="why-item">
+              <span class="why-item-num">01</span>
+              <div>
+                <p class="why-item-title">Slow-acting by design</p>
+                <p class="why-item-body">Borax functions as a stomach poison when consumed, gradually disrupting internal processes.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <span class="why-item-num">02</span>
+              <div>
+                <p class="why-item-title">Time enables spread</p>
+                <p class="why-item-body">Because the effect is not immediate, ants continue moving, feeding, and interacting within the colony.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <span class="why-item-num">03</span>
+              <div>
+                <p class="why-item-title">Reaches beyond the trail</p>
+                <p class="why-item-body">This allows the active ingredient to spread further than what's visible, increasing overall effectiveness.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 4 -->
+        <div class="why-group">
+          <div class="why-group-img">
+            <img src="brand_assets/Images/compressed/Compressed-8.jpg" alt="Reaching the Queen" loading="lazy" />
+          </div>
+          <div class="why-group-content">
+            <p class="why-group-title">Reaching the Queen</p>
+            <div class="why-item">
+              <span class="why-item-num">01</span>
+              <div>
+                <p class="why-item-title">Workers don't reproduce</p>
+                <p class="why-item-body">The ants you see are typically workers. They forage for food, but the queen is responsible for reproduction.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <span class="why-item-num">02</span>
+              <div>
+                <p class="why-item-title">Food flows through the colony</p>
+                <p class="why-item-body">Through trophallaxis, nutrients are shared across the nest, allowing the bait to travel deeper inside.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <span class="why-item-num">03</span>
+              <div>
+                <p class="why-item-title">Affecting the source reduces the colony</p>
+                <p class="why-item-body">When the queen is affected, the colony's ability to sustain itself declines, leading to a gradual reduction in activity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================
+       WHY NTN
+  ========================================= -->
+  <section id="why-ntn">
+    <div class="vs-inner">
+      <div class="vs-header">
+        <span class="eyebrow">Why NTN</span>
+        <h2>NTN is designed to travel further.</h2>
+        <p class="body-copy">Sprays, gels, and liquid baits can all reduce ant activity. The key difference is how easily the active ingredient moves through the colony.</p>
+      </div>
+      <div class="vs-rows">
+        <div class="vs-row header-row">
+          <div class="vs-cell">Feature</div>
+          <div class="vs-cell ntn">NTN Liquid Bait</div>
+          <div class="vs-cell">Sprays</div>
+          <div class="vs-cell">Gel Baits</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-cell">Primary function</div>
+          <div class="vs-cell ntn">✔ Bait consumed and carried back</div>
+          <div class="vs-cell">✔ Instant contact kill</div>
+          <div class="vs-cell">✔ Bait consumed if encountered</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-cell">Ability to reach the nest</div>
+          <div class="vs-cell ntn">✔ Can reach the nest</div>
+          <div class="vs-cell">– Limited to surface</div>
+          <div class="vs-cell">✔ Can reach the nest</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-cell">Spread within colony</div>
+          <div class="vs-cell ntn">✔ Shared across ants</div>
+          <div class="vs-cell">– No spread</div>
+          <div class="vs-cell">✔ Depends on uptake</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-cell">Uptake by ants</div>
+          <div class="vs-cell ntn">✔ Liquid form is easy to consume</div>
+          <div class="vs-cell">– Not applicable</div>
+          <div class="vs-cell">○ Slower to consume</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-cell">Speed of visible effect</div>
+          <div class="vs-cell ntn">✔ 1–3 days as bait spreads</div>
+          <div class="vs-cell">✔ Immediate</div>
+          <div class="vs-cell">○ Varies</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-cell">Colony elimination</div>
+          <div class="vs-cell ntn">✔ Targets the queen</div>
+          <div class="vs-cell">– Does not address the colony</div>
+          <div class="vs-cell">✔ Targets queen but less efficient</div>
+        </div>
+        <div class="vs-row">
+          <div class="vs-cell">Residue / cleanup</div>
+          <div class="vs-cell ntn">✔ Cleaner overall</div>
+          <div class="vs-cell">○ Can leave chemical residue</div>
+          <div class="vs-cell">○ Can be sticky</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- =========================================
+       BRAND STORY
+  ========================================= -->
+  <section id="story">
+    <div class="story-ant-overlay" aria-hidden="true"></div>
+    <div class="story-inner">
+      <div class="story-image">
+        <img src="brand_assets/Images/compressed/Compressed--4.jpg" alt="NTN Liquid Ant Killer" loading="lazy" decoding="async" />
+      </div>
+      <div>
+        <span class="story-eyebrow">Why NTN Exists</span>
+        <h2 class="story-headline">Made because<br>nothing worked.</h2>
+        <div class="story-body">
+          <p>After moving into my new place, ants started invading our home. At first it was just a few, then suddenly they were everywhere. I found them in my pantry, getting into our food, in our water jug, and even in my plants. It started to feel like we couldn't keep anything clean. After enough nudging from my wife to fix it, I tried the usual home remedies and store-bought products, but none of them worked. The ants kept coming back, no matter what I did. So I decided to make my own.</p>
+          <p>I started experimenting with different ingredients and ratios, testing early versions with friends and family. With each round of feedback, I adjusted and tried again. Over time, it became something that worked reliably. A liquid bait that ants would take back and spread through the colony.</p>
+          <p><strong>That is how NTN came about.</strong></p>
+        </div>
+      </div>
+      <div></div>
+    </div>
+  </section>
+
+
+  <!-- =========================================
+       FAQ
+  ========================================= -->
+  <section id="faq">
+    <div class="faq-inner">
+      <div class="faq-left">
+        <span class="eyebrow">Questions</span>
+        <div class="faq-section-label">FAQ</div>
+        <p class="body-copy">Everything you need to know.</p>
+        <p style="margin-top:24px; font-size:13px; color:var(--muted);">
+          Still have questions?<br>
+          <a href="#contact" style="color:var(--black); font-weight:700; text-decoration:underline; text-underline-offset:3px;">Contact us →</a>
+        </p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">What is Borax?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">Borax is a naturally occurring mineral commonly used in cleaning products, cosmetics, and various industrial applications.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">Is it safe for humans?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">Borax has low toxicity to humans when used as directed, but it is effective against small insects like ants when ingested. As a precaution, apply the bait in hard-to-reach areas and avoid placing it where pets or children may come into contact with it.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">Why don't the ants die immediately?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">The slow action is intentional. A fast-kill stops at the surface. Borax works gradually so worker ants have time to carry the bait back to the nest and share it with the colony before it takes effect. This is what allows it to reach the queen and nest.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">How long does it take to see results?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">Most users notice a reduction in ant activity by day 1 to 3. In some cases, results are visible within 24 hours. Larger infestations may take a little longer — reapply as needed until activity stops.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">Where should I apply it?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">Apply directly on the ant trail. A few drops is enough. For a cleaner setup, place drops on a piece of aluminium foil or a plastic card — easy to remove when done.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">The ants aren't touching it. What do I do?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">Ants won't feed if they're disturbed or not actively foraging. Your shadow or movement near them can stop them. Wait a few hours and try again. Make sure the bait is placed directly on or close to their trail.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">Is it safe around pets?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">Borax is relatively safe, but we recommend applying in areas your pets can't easily access — under furniture, behind appliances, along baseboards. Avoid open areas where pets roam freely.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">How do I clean it up after?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">Dry tissue to remove the bulk, damp tissue to clear the remaining residue. If you used foil or a card, dispose of it directly.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">How many bottles do I need?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">One 30ml bottle handles most infestations — often with multiple applications. Each use only requires a few drops. Larger infestations will use more, but one bottle goes a long way.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" aria-expanded="false">What is in NTN?<span class="faq-icon">+</span></button>
+          <div class="faq-answer">7.5% Sodium Tetraborate Decahydrate (Borax)<br><br>92.5% Other ingredients</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================
+       CONTACT US
+  ========================================= -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="contact-left">
+        <span class="eyebrow">Contact Us</span>
+        <h2 class="contact-headline">Get in<br>touch.</h2>
+        <p class="contact-sub">Have a question about the product, a bulk order, or just want to say hi? We're happy to help.</p>
+      </div>
+      <div class="contact-right">
+        <a href="mailto:ntnpestcontrol@gmail.com" class="contact-item">
+          <span class="contact-item-label">Email</span>
+          <span class="contact-item-value">ntnpestcontrol@gmail.com</span>
+          <span class="contact-item-note">We typically reply within 1–2 business days.</span>
+        </a>
+        <a href="#buy" class="contact-item">
+          <span class="contact-item-label">Buy Online</span>
+          <span class="contact-item-value">Available on Shopee, Lazada, TikTok &amp; Amazon →</span>
+          <span class="contact-item-note">Fast delivery across Singapore.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================
+       WHERE TO BUY
+  ========================================= -->
+  <section id="buy">
+    <div class="buy-inner">
+      <h2 class="buy-headline">Get It Now.</h2>
+      <p class="buy-subhead">Available online &amp; in stores.</p>
+
+      <div class="platform-grid">
+        <a href="https://shopee.sg/NTN-Liquid-Ant-Killer-%E2%80%94-Borax-based-ant-bait-poison-(30ml)-i.897448983.19563574581?extraParams=%7B%22display_model_id%22%3A232929112208%2C%22model_selection_logic%22%3A3%7D"
+           target="_blank" rel="noopener noreferrer" class="platform-btn">
+          <span>Shopee</span><span class="platform-btn-arrow">→</span>
+        </a>
+        <a href="https://www.lazada.sg/products/ntn-liquid-ant-killer-borax-based-ant-baitpoison-30ml-i2618389032.html"
+           target="_blank" rel="noopener noreferrer" class="platform-btn">
+          <span>Lazada</span><span class="platform-btn-arrow">→</span>
+        </a>
+        <a href="https://vt.tiktok.com/ZSLoo8abs/"
+           target="_blank" rel="noopener noreferrer" class="platform-btn">
+          <span>TikTok Shop</span><span class="platform-btn-arrow">→</span>
+        </a>
+        <a href="https://www.amazon.sg/NTN-Liquid-Ant-Killer-poison/dp/B0CGM3LKRK"
+           target="_blank" rel="noopener noreferrer" class="platform-btn">
+          <span>Amazon</span><span class="platform-btn-arrow">→</span>
+        </a>
+      </div>
+
+      <img src="brand_assets/Logos/brand partner/brand partner logos.png" alt="Brand partners" class="buy-partner-img" loading="lazy" />
+
+      <div class="stores-divider"></div>
+      <p class="stores-eyebrow">Coming Soon</p>
+      <div class="stores-grid">
+        <div class="store-card">
+          <div class="store-name">Store Name</div>
+          <div class="store-address">Address line 1<br>Singapore XXXXXX</div>
+        </div>
+        <div class="store-card">
+          <div class="store-name">Store Name</div>
+          <div class="store-address">Address line 1<br>Singapore XXXXXX</div>
+        </div>
+        <div class="store-card">
+          <div class="store-name">Store Name</div>
+          <div class="store-address">Address line 1<br>Singapore XXXXXX</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================
+       FOOTER
+  ========================================= -->
+  <footer>
+    <div class="footer-inner">
+      <img src="brand_assets/Logos/NTN LOGO_white.png" alt="NTN" style="height:72px;" />
+      <p class="footer-copy">&copy; 2026 NTN. All rights reserved.</p>
+    </div>
+  </footer>
+
+
+  <!-- STICKY MOBILE CTA -->
+  <div id="sticky-cta">
+    <div class="sticky-inner">
+      <div>
+        <div class="sticky-label">NTN Liquid Ant Killer</div>
+        <span class="sticky-sub">30ml · Borax-based · Made in Singapore</span>
+      </div>
+      <a href="#buy" class="sticky-btn">Buy Now</a>
+    </div>
+  </div>
+
+
+  <!-- =========================================
+       JAVASCRIPT
+  ========================================= -->
+  <script>
+    // === Nav scroll state ===
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // === Active nav section highlighting ===
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link[data-section]');
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.dataset.section === entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.25, rootMargin: '-60px 0px -40% 0px' });
+    sections.forEach(s => sectionObserver.observe(s));
+
+    // === Reviews Marquee — click to pause/resume ===
+    (function () {
+      const track = document.getElementById('marquee-track');
+      if (!track) return;
+      let paused = false;
+      track.parentElement.addEventListener('click', function () {
+        paused = !paused;
+        track.classList.toggle('paused', paused);
+      });
+    })();
+
+    // === FAQ accordion ===
+    document.querySelectorAll('.faq-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item   = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-btn').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+      });
+    });
+
+    // === Sticky mobile CTA ===
+    const stickyCta   = document.getElementById('sticky-cta');
+    const heroActions = document.querySelector('.hero-actions');
+    const buySection  = document.getElementById('buy');
+    const stickyObs   = new IntersectionObserver(() => {
+      const hR = heroActions?.getBoundingClientRect();
+      const bR = buySection?.getBoundingClientRect();
+      const inHero = hR && hR.top < window.innerHeight && hR.bottom > 0;
+      const inBuy  = bR && bR.top  < window.innerHeight && bR.bottom  > 0;
+      stickyCta.style.display = (inHero || inBuy) ? 'none' : 'block';
+    }, { threshold: 0 });
+    if (heroActions) stickyObs.observe(heroActions);
+    if (buySection)  stickyObs.observe(buySection);
+
+    // === GSAP Animations ===
+    window.addEventListener('load', () => {
+      if (typeof gsap === 'undefined') return;
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.config({ fastScrollEnd: true });
+      // Recalculate pin spacers after fonts render (prevents stale height gap)
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+
+      // Hero
+      gsap.from('#hero-headline', { opacity: 0, y: 40, duration: 1, ease: 'power3.out', delay: 0.2 });
+      gsap.from('.hero-sticker', { scale: 0.6, opacity: 0, duration: 0.9, ease: 'back.out(1.7)', delay: 1.0 });
+      gsap.from(['.hero-desc', '.hero-actions', '.hero-stat-row'], {
+        opacity: 0, y: 24, duration: 0.8, ease: 'power2.out', stagger: 0.15, delay: 0.5
+      });
+
+      // Hero video — two-phase scroll-driven scrub
+      // Phase 1: hero pinned, scrub 0 → 3 s
+      // Phase 2: hero unpins and scrolls naturally, scrub 3 s → end
+      (function () {
+        var vid = document.getElementById('hero-video');
+        if (!vid) return;
+
+        var PHASE1_SECS = 3;    // seconds of video to cover while pinned
+        var PX_PER_SEC  = 180;  // scroll pixels per video-second (controls pin duration)
+
+        function seek(t) {
+          // fastSeek is available in Firefox — falls back to currentTime everywhere else
+          if (typeof vid.fastSeek === 'function') { vid.fastSeek(t); } else { vid.currentTime = t; }
+        }
+
+        function bindScrub() {
+          vid.pause();
+          seek(0);
+
+          var dur  = vid.duration || 4;
+          var p1s  = Math.min(PHASE1_SECS, dur); // actual phase-1 video seconds
+          var p1px = p1s * PX_PER_SEC;           // scroll distance while pinned
+
+          // ── Phase 1: pin hero, scrub video 0 → p1s ─────────────────────
+          ScrollTrigger.create({
+            trigger:           '#hero',
+            start:             'top top',
+            end:               '+=' + p1px,
+            pin:               true,
+            pinSpacing:        true,
+            invalidateOnRefresh: true,
+            scrub:             true,
+            onUpdate: function (st) {
+              if (vid.readyState >= 2) seek(p1s * st.progress);
+            }
+          });
+
+          // ── Phase 2: hero scrolls off naturally, scrub video p1s → end ──
+          if (dur > p1s) {
+            ScrollTrigger.create({
+              trigger:           '#hero',
+              start:             'top top-=' + p1px,
+              end:               'bottom top',
+              invalidateOnRefresh: true,
+              scrub:             true,
+              onUpdate: function (st) {
+                if (vid.readyState >= 2) seek(p1s + (dur - p1s) * st.progress);
+              }
+            });
+          }
+        }
+
+        // Bind as soon as video metadata is available; fall back gracefully
+        // if the video never loads (first frame stays visible, no JS errors).
+        if (vid.readyState >= 1) {
+          bindScrub();
+        } else {
+          vid.addEventListener('loadedmetadata', bindScrub, { once: true });
+        }
+      })();
+
+      // Section headings
+      document.querySelectorAll('.display--medium').forEach(el => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: 'top 88%' },
+          y: 36, opacity: 0, duration: 0.9, ease: 'power3.out'
+        });
+      });
+
+
+      // Steps
+      gsap.from('.step-panel', {
+        scrollTrigger: { trigger: '.steps-row', start: 'top 82%' },
+        y: 24, opacity: 0, duration: 1.0, ease: 'power2.out', stagger: 0.18
+      });
+      document.querySelectorAll('.step-image').forEach(img => {
+        gsap.from(img, {
+          scrollTrigger: { trigger: img, start: 'top 90%' },
+          opacity: 0, y: 16, duration: 1.0, ease: 'power2.out'
+        });
+      });
+
+      // How it works — per-group scroll animations
+      document.querySelectorAll('.why-group').forEach(function(group) {
+        var img   = group.querySelector('.why-group-img img');
+        var title = group.querySelector('.why-group-title');
+        var items = group.querySelectorAll('.why-item');
+
+        // Staggered fade-in: title then items
+        var tl = gsap.timeline({
+          scrollTrigger: { trigger: group, start: 'top 78%', toggleActions: 'play none none none' }
+        });
+        tl.from(title, { y: 14, opacity: 0, duration: 0.55, ease: 'power2.out' })
+          .from(items,  { y: 16, opacity: 0, duration: 0.6,  ease: 'power2.out', stagger: 0.13 }, '-=0.25');
+
+        // Image zoom tied to scroll (scrub)
+        if (img) {
+          gsap.fromTo(img,
+            { scale: 1.0 },
+            { scale: 1.18, ease: 'none',
+              scrollTrigger: { trigger: group, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
+            }
+          );
+        }
+      });
+
+      // Comparison rows
+      gsap.from('.vs-row:not(.header-row)', {
+        scrollTrigger: { trigger: '.vs-rows', start: 'top 80%' },
+        x: -16, opacity: 0, duration: 0.55, ease: 'power2.out', stagger: 0.07
+      });
+
+      // Testimonial
+      gsap.from('.testimonial-quote-large', {
+        scrollTrigger: { trigger: '#testimonials', start: 'top 78%' },
+        y: 28, opacity: 0, duration: 1.0, ease: 'power3.out'
+      });
+
+      // Story — single unified fade-up, no stagger
+      gsap.from('#story .story-inner > *', {
+        scrollTrigger: { trigger: '#story', start: 'top 82%' },
+        y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', stagger: 0
+      });
+
+      // Contact + Buy
+      gsap.from('.contact-item', {
+        scrollTrigger: { trigger: '#contact', start: 'top 80%' },
+        y: 24, opacity: 0, duration: 0.7, ease: 'power2.out', stagger: 0.12
+      });
+      gsap.from('.platform-btn', {
+        scrollTrigger: { trigger: '.platform-grid', start: 'top 85%' },
+        y: 24, opacity: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08
+      });
+    });
+  </script>
+
+</body>
+</html>
