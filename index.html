@@ -384,6 +384,41 @@
     }
 
     /* =========================================
+       RESULTS
+    ========================================= */
+    #results {
+      background: var(--black);
+      padding: 80px 56px;
+    }
+    .results-inner {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    .results-headline {
+      font-size: clamp(24px, 3vw, 42px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 48px;
+      text-align: center;
+    }
+    .results-videos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .results-videos video {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      border-radius: 4px;
+    }
+
+    /* =========================================
        REVIEWS MARQUEE
     ========================================= */
     #reviews-carousel {
@@ -1103,6 +1138,9 @@
       .mobile-only { display: block; }
 
       /* Marquee */
+      #results { padding: 48px 16px; }
+      .results-videos { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .results-videos video { aspect-ratio: 1 / 1; border-radius: 2px; }
       #reviews-carousel { padding: 56px 0; }
       .marquee-header { padding: 0 24px; }
       .marquee-item { width: 280px; }
@@ -1172,6 +1210,7 @@
         <img class="nav-logo-img" src="brand_assets/Logos/NTN LOGO_black.png" alt="NTN" />
       </a>
       <div class="nav-links">
+        <a href="#results"           class="nav-link" data-section="results">Results</a>
         <a href="#reviews-carousel"  class="nav-link" data-section="reviews-carousel">Reviews</a>
         <a href="#how-to-use"       class="nav-link" data-section="how-to-use">How to Use</a>
         <a href="#why-it-works"     class="nav-link" data-section="why-it-works">How It Works</a>
@@ -1266,6 +1305,21 @@
     <span class="hero-proof-sep">·</span>
     <span class="hero-proof-item">Trusted by households across Singapore</span>
   </div>
+
+
+  <!-- =========================================
+       RESULTS
+  ========================================= -->
+  <section id="results">
+    <div class="results-inner">
+      <h2 class="results-headline">Watch the colony disappear</h2>
+      <div class="results-videos">
+        <video src="brand_assets/videos/Using NTN Liquid ant killer_v1.mp4" muted autoplay loop playsinline preload="metadata"></video>
+        <video src="brand_assets/videos/Using NTN Liquid ant killer_v2.mp4" muted autoplay loop playsinline preload="metadata"></video>
+        <video src="brand_assets/videos/Using NTN Liquid ant killer_v3.mp4" muted autoplay loop playsinline preload="metadata"></video>
+      </div>
+    </div>
+  </section>
 
 
   <!-- =========================================
