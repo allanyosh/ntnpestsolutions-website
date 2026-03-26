@@ -248,7 +248,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 80px 56px 80px 256px;
+      padding: 40px 40px 40px 80px;
       max-width: 600px;
       width: 100%;
       margin: 0 auto;
@@ -259,12 +259,12 @@
     }
 
     .hero-headline {
-      font-size: clamp(44px, 5vw, 80px);
+      font-size: clamp(36px, 4vw, 64px);
       font-weight: 900;
       line-height: 0.97;
       letter-spacing: -0.04em;
       text-transform: uppercase;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
     }
     .hero-headline .accent {
       display: block;
@@ -278,25 +278,25 @@
     }
 
     .hero-desc {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 400;
-      line-height: 1.8;
+      line-height: 1.7;
       color: var(--muted);
-      margin-bottom: 40px;
+      margin-bottom: 28px;
     }
 
     .hero-actions {
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-bottom: 52px;
+      margin-bottom: 32px;
       white-space: nowrap;
     }
 
     .hero-stat-row {
       display: flex;
-      gap: 40px;
-      padding-top: 36px;
+      gap: 32px;
+      padding-top: 24px;
       border-top: 1px solid var(--border);
     }
     .hero-stat-num {
@@ -327,7 +327,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: right center;
+      object-position: calc(50% - 60px) center;
       display: block;
     }
     /* Inward vignette — fades all four edges to white so video
@@ -345,7 +345,7 @@
     }
     .hero-sticker {
       position: absolute;
-      top: -24px;
+      top: 20px;
       right: -90px;
       width: 160px;
       height: auto;
@@ -566,7 +566,7 @@
       display: grid;
       grid-template-columns: 42vw 1fr;
       gap: 0;
-      align-items: start;
+      align-items: stretch;
       background: var(--black);
     }
     /* Odd groups: yellow bg */
@@ -576,7 +576,6 @@
     }
     .why-group-img {
       overflow: hidden;
-      aspect-ratio: 16 / 9;
       width: 100%;
     }
     .why-group-img img {
@@ -643,8 +642,8 @@
       color: var(--black);
     }
     .why-item-body {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 600;
       color: rgba(255,255,255,0.72);
       line-height: 1.6;
     }
@@ -665,18 +664,19 @@
       max-width: 760px;
       margin: 0 auto 64px;
     }
+    .vs-header .body-copy { font-size: 13px; line-height: 1.7; }
     .vs-header .eyebrow {
-      font-size: 18px;
+      font-size: 13px;
       letter-spacing: 0.18em;
     }
     .vs-header h2 {
-      font-size: clamp(32px, 4.5vw, 62px);
+      font-size: clamp(24px, 3vw, 42px);
       font-weight: 900;
       letter-spacing: -0.03em;
       line-height: 1.05;
       text-transform: uppercase;
-      margin-top: 14px;
-      margin-bottom: 20px;
+      margin-top: 10px;
+      margin-bottom: 14px;
     }
     .vs-rows { display: flex; flex-direction: column; }
     .vs-row {
@@ -757,7 +757,7 @@
        BRAND STORY
     ========================================= */
     #story {
-      padding: 120px 56px;
+      padding: 72px 56px;
       background: var(--yellow);
       position: relative;
       overflow: hidden;
@@ -777,7 +777,7 @@
     }
     .story-inner {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 72px;
       align-items: start;
       position: relative;
@@ -794,7 +794,7 @@
       opacity: 0.5;
     }
     .story-headline {
-      font-size: clamp(36px, 4vw, 64px);
+      font-size: clamp(28px, 3vw, 48px);
       font-weight: 900;
       letter-spacing: -0.03em;
       line-height: 1.05;
@@ -804,8 +804,8 @@
       margin-bottom: 28px;
     }
     .story-body {
-      font-size: 18px;
-      line-height: 1.85;
+      font-size: 14px;
+      line-height: 1.75;
       color: rgba(0,0,0,0.72);
     }
     .story-body p + p { margin-top: 18px; }
@@ -1092,6 +1092,7 @@
       #hero { grid-template-columns: 1fr; min-height: auto; }
       .hero-right { height: 60vw; min-height: 60vw; order: -1; }
       .hero-video-vignette { display: none; }
+      .hero-bg-video { object-position: center center; }
       .hero-left { padding: 40px 24px 96px; max-width: 100%; }
       .hero-headline { font-size: 42px; }
       .hero-actions { flex-direction: column; align-items: flex-start; }
@@ -1245,7 +1246,9 @@
         id="hero-video"
         class="hero-bg-video"
         src="brand_assets/videos/bottle_squeezing_hero page_v3.mp4"
+        autoplay
         muted
+        loop
         playsinline
         preload="auto"
         disablepictureinpicture
@@ -1428,7 +1431,7 @@
     <div class="vs-inner">
       <div class="vs-header">
         <span class="eyebrow">Why NTN</span>
-        <h2>Kills Ants at the Source</h2>
+        <h2>Made because<br>nothing worked.</h2>
         <p class="body-copy">Most ant killers kill surface ants.<br>NTN eliminates the colony.</p>
       </div>
       <div class="vs-rows">
@@ -1491,23 +1494,19 @@
        BRAND STORY
   ========================================= -->
   <section id="story">
-    <div class="story-ant-overlay" aria-hidden="true">
-      <img src="brand_assets/Images/ant crawling graphic-sm.png" alt="" loading="lazy" decoding="async" />
-    </div>
     <div class="story-inner">
       <div class="story-image">
         <img src="brand_assets/Images/compressed/Compressed--4.jpg" alt="NTN Liquid Ant Killer" loading="lazy" decoding="async" />
       </div>
       <div>
         <span class="story-eyebrow">Why NTN Exists</span>
-        <h2 class="story-headline">Made because<br>nothing worked.</h2>
+        <h2 class="story-headline">Made because nothing worked.</h2>
         <div class="story-body">
           <p>After moving into my new place, ants started invading our home. At first it was just a few, then suddenly they were everywhere. I found them in my pantry, getting into our food, in our water jug, and even in my plants. It started to feel like we couldn't keep anything clean. After enough nudging from my wife to fix it, I tried the usual home remedies and store-bought products, but none of them worked. The ants kept coming back, no matter what I did. So I decided to make my own.</p>
           <p>I started experimenting with different ingredients and ratios, testing early versions with friends and family. With each round of feedback, I adjusted and tried again. Over time, it became something that worked reliably. A liquid bait that ants would take back and spread through the colony.</p>
           <p><strong>That is how NTN came about.</strong></p>
         </div>
       </div>
-      <div></div>
     </div>
   </section>
 
