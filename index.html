@@ -54,6 +54,7 @@
       color: var(--muted);
     }
     .eyebrow--light { color: rgba(255,255,255,0.45); }
+    .mobile-only { display: none; }
 
     .display--medium {
       font-size: clamp(28px, 4vw, 52px);
@@ -359,6 +360,26 @@
       text-transform: uppercase;
       color: rgba(0,0,0,0.35);
       z-index: 2;
+    }
+
+    #hero-proof {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 18px 24px;
+      background: var(--off);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-proof-item {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--black);
+    }
+    .hero-proof-sep {
+      color: var(--muted);
+      font-size: 13px;
     }
 
     /* =========================================
@@ -1076,7 +1097,8 @@
       .hero-actions .btn-yellow,
       .hero-actions .btn-ghost { width: 100%; }
       .hero-stat-row { gap: 24px; flex-wrap: wrap; }
-      .hero-sticker { right: 0; top: -16px; width: 120px; }
+      .hero-sticker { right: 0; top: 24px; width: 100px; }
+      .mobile-only { display: block; }
 
       /* Marquee */
       #reviews-carousel { padding: 56px 0; }
@@ -1182,8 +1204,8 @@
     <div class="hero-left">
       <div class="hero-headline-wrap">
         <h1 class="hero-headline" id="hero-headline">
-          Kills<br>the colony.
-          <span class="accent">Not just the ants you see.</span>
+          Kills ants at<br class="mobile-only"> the source
+          <span class="accent">not just the ones you see.</span>
         </h1>
         <img
           class="hero-sticker"
@@ -1193,7 +1215,7 @@
       </div>
 
       <p class="hero-desc">
-        A borax-based liquid bait that ants carry back to the nest, targeting the entire colony at its source. Noticeable results in 1–3 days.
+        NTN Liquid Ant Killer uses a slow-acting bait that ants carry back to eliminate the entire colony. 1–3 days to noticeable results.
       </p>
 
       <div class="hero-actions">
@@ -1230,6 +1252,16 @@
       <div class="hero-video-vignette" aria-hidden="true"></div>
     </div>
   </section>
+
+  <div id="hero-proof">
+    <span class="hero-proof-item">2,500+ bottles sold</span>
+    <span class="hero-proof-sep">·</span>
+    <span class="hero-proof-item">4.9★ average rating</span>
+    <span class="hero-proof-sep">·</span>
+    <span class="hero-proof-item">Results in 1–3 days</span>
+    <span class="hero-proof-sep">·</span>
+    <span class="hero-proof-item">Trusted by households across Singapore</span>
+  </div>
 
 
   <!-- =========================================
@@ -1313,7 +1345,7 @@
           </div>
         </div>
         <h3 class="step-headline">Apply near ant trails</h3>
-        <p class="step-body">Locate where ants are moving. Place a few drops directly on the trail, or on a piece of foil or plastic for easy cleanup.</p>
+        <p class="step-body">Place a few drops where ants are moving, or on a small piece of foil or plastic for easy cleanup.</p>
         <img class="step-image" src="brand_assets/Images/compressed/Compressed-1.jpg" alt="Ant trail on surface" loading="lazy" />
       </div>
 
@@ -1324,8 +1356,8 @@
             <img src="brand_assets/Images/emoji/fork-and-knife-with-plate_1f37d-fe0f.png" alt="" />
           </div>
         </div>
-        <h3 class="step-headline">Allow ants to feed</h3>
-        <p class="step-body">Ants will drink the bait and carry it back to the nest. Avoid disturbing them — each feeding helps spread the bait deeper.</p>
+        <h3 class="step-headline">Let ants feed</h3>
+        <p class="step-body">Ants will drink the bait and carry it back. Avoid disturbing them.</p>
         <img class="step-image" src="brand_assets/Images/ants drinking ntn-clean bg.png" alt="Ants feeding on NTN bait" loading="lazy" />
       </div>
 
@@ -1336,8 +1368,8 @@
             <img src="brand_assets/Images/emoji/skull-and-crossbones_2620-fe0f.png" alt="" />
           </div>
         </div>
-        <h3 class="step-headline">Bait reaches the colony</h3>
-        <p class="step-body">The bait spreads through the nest. Results are typically seen in 1–3 days. Reapply as needed until activity stops.</p>
+        <h3 class="step-headline">Colony gets eliminated</h3>
+        <p class="step-body">The bait spreads through the nest. Results typically appear in 1–3 days.</p>
         <img class="step-image" src="brand_assets/Images/compressed/Compressed--6.jpg" alt="NTN Liquid Ant Killer bottles" loading="lazy" />
       </div>
     </div>
@@ -1395,8 +1427,8 @@
     <div class="vs-inner">
       <div class="vs-header">
         <span class="eyebrow">Why NTN</span>
-        <h2>NTN is designed to travel further.</h2>
-        <p class="body-copy">Sprays, gels, and liquid baits can all reduce ant activity. The key difference is how easily the active ingredient moves through the colony.</p>
+        <h2>Kills Ants at the Source</h2>
+        <p class="body-copy">Most ant killers kill surface ants.<br>NTN eliminates the colony.</p>
       </div>
       <div class="vs-rows">
         <div class="vs-row header-row">
