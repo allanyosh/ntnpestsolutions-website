@@ -1812,7 +1812,17 @@
           // On mobile: just autoplay/loop — no pinning
           vid.setAttribute('autoplay', '');
           vid.setAttribute('loop', '');
-          vid.play().catch(function () {});
+          vid.muted = true;
+          var playPromise = vid.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(function () {
+              // iOS blocked autoplay — play on first touch
+              document.addEventListener('touchstart', function tryPlay() {
+                vid.play();
+                document.removeEventListener('touchstart', tryPlay);
+              }, { once: true });
+            });
+          }
           return;
         }
 
