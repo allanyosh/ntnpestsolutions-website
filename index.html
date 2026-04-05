@@ -194,6 +194,20 @@
       flex-shrink: 0;
     }
     .nav-cta:hover { background: var(--yellow); color: var(--black); }
+    .nav-social {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-right: 16px;
+    }
+    .nav-social-link {
+      display: flex;
+      align-items: center;
+      color: var(--black);
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .nav-social-link:hover { opacity: 1; }
 
     /* =========================================
        TICKER BANNER
@@ -1128,6 +1142,7 @@
       #sticky-cta { display: block; }
       #nav { padding: 0 20px; }
       .nav-links { display: none; }
+      .nav-social { margin-right: auto; margin-left: auto; }
 
       /* Hero */
       #hero { grid-template-columns: 1fr; min-height: auto; }
@@ -1224,6 +1239,14 @@
         <a href="#story"            class="nav-link" data-section="story">Brand Story</a>
         <a href="#faq"              class="nav-link" data-section="faq">FAQ</a>
         <a href="#contact"          class="nav-link" data-section="contact">Contact Us</a>
+      </div>
+      <div class="nav-social">
+        <a href="https://www.instagram.com/ntn.solutions/" target="_blank" rel="noopener noreferrer" class="nav-social-link" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@ntn.solutions" target="_blank" rel="noopener noreferrer" class="nav-social-link" aria-label="TikTok">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+        </a>
       </div>
       <a href="#buy" class="nav-cta">Buy Now</a>
     </div>
